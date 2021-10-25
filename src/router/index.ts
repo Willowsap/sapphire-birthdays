@@ -1,25 +1,33 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../views/Home.vue";
+import ProfileList from "../views/ProfileList.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    name: "ProfileList",
+    component: ProfileList,
   },
   {
-    path: "/about",
-    name: "About",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
-  },
-  {
-    path: "/profile/:id",
+    path: "/profile/:profileId",
     name: "Profile",
     props: true,
     component: () =>
-      import(/* webpackChunkName: "profile */ "../views/Profile.vue")
-  }
+      import(/* webpackChunkName: "profile" */ "../views/Profile.vue")
+  },
+  {
+    path: "/create",
+    name: "ProfileCreate",
+    props: false,
+    component: () =>
+      import(/* webpackChunkName: "create" */ "../views/ProfileCreate.vue")
+  },
+  {
+    path: "/edit/:profileId",
+    name: "ProfileEdit",
+    props: true,
+    component: () =>
+      import(/* webpackChunkName: "edit" */ "../views/ProfileEdit.vue")
+  },
 ];
 
 const router = createRouter({

@@ -1,18 +1,33 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+  <the-header />
   <router-view />
+  <the-footer />
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+import TheHeader from "./components/TheHeader.vue";
+import TheFooter from "./components/TheFooter.vue";
+
+export default defineComponent({
+  components: {
+    TheHeader,
+    TheFooter
+  }
+})
+</script>
+
 <style>
+body {
+  background-color: #968298;
+  height: 100%;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Zen Kurenaido', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
 }
 
 #nav {
