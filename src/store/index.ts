@@ -3,7 +3,8 @@ import axios from "axios";
 import { ServerProfile } from "@/models/serverProfile.model";
 import { Profile } from "@/models/profile.model";
 
-const url = "http://localhost:3000/api/profiles";
+// const url = "http://localhost:3000/api/profiles";
+const url = "https://sapphire-birthdays-server.herokuapp.com/api/profiles";
 
 const transformId = (profileList: Array<ServerProfile>): Array<Profile> => {
   return profileList.map((item: ServerProfile) => {
