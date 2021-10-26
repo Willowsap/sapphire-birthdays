@@ -1,5 +1,5 @@
-export interface Profile {
-  id: string;
+export interface ServerProfile {
+  _id: string;
   fname: string;
   mname: string;
   lname: string;

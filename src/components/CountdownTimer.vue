@@ -1,27 +1,34 @@
 <template>
-  <table class="countdown">
-    <tr class="timer">
-      <td class="term">
-        <span class="number day">{{ dayString }}</span>
-        <span class="unit">{{ dayTerm }}</span>
-      </td>
-      <td class="spacer">:</td>
-      <td class="term">
-        <span class="number hour">{{ hourString }}</span>
-        <span class="unit">{{ hourTerm}}</span>
-      </td>
-      <td class="spacer">:</td>
-      <td class="term">
-        <span class="number minute">{{ minuteString }}</span>
-        <span class="unit">{{ minuteTerm }}</span>
-      </td>
-      <td class="spacer">:</td>
-      <td class="term">
-        <span class="number second">{{ secondString }}</span>
-        <span class="unit">{{ secondTerm }}</span>
-      </td>
-    </tr>
-  </table>
+  <slot
+    :days="dayString"
+    :hours="hourString"
+    :minutes="minuteString"
+    :seconds="secondString"
+  >
+    <table class="countdown">
+      <tr class="timer">
+        <td class="term">
+          <span class="number day">{{ dayString }}</span>
+          <span class="unit">{{ dayTerm }}</span>
+        </td>
+        <td class="spacer">:</td>
+        <td class="term">
+          <span class="number hour">{{ hourString }}</span>
+          <span class="unit">{{ hourTerm }}</span>
+        </td>
+        <td class="spacer">:</td>
+        <td class="term">
+          <span class="number minute">{{ minuteString }}</span>
+          <span class="unit">{{ minuteTerm }}</span>
+        </td>
+        <td class="spacer">:</td>
+        <td class="term">
+          <span class="number second">{{ secondString }}</span>
+          <span class="unit">{{ secondTerm }}</span>
+        </td>
+      </tr>
+    </table>
+  </slot>
 </template>
 
 <script lang="ts">
@@ -29,7 +36,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "CountdownTimer",
-  props: ["birthday"],
+  props: ["end"],
   data() {
     return {
       days: 0,
@@ -48,18 +55,24 @@ export default defineComponent({
       return this.days.toString();
     },
     hourString() {
-      return this.hours > 9 ? this.hours.toString() : "0" + this.hours.toString();
+      return this.hours > 9
+        ? this.hours.toString()
+        : "0" + this.hours.toString();
     },
     minuteString() {
-      return this.minutes > 9 ? this.minutes.toString() : "0" + this.minutes.toString();
+      return this.minutes > 9
+        ? this.minutes.toString()
+        : "0" + this.minutes.toString();
     },
     secondString() {
-      return this.seconds > 9 ? this.seconds.toString() : "0" + this.seconds.toString();
+      return this.seconds > 9
+        ? this.seconds.toString()
+        : "0" + this.seconds.toString();
     },
   },
   mounted() {
-    const start = this.birthday.getTime();
-    const end = start + 1000 * 60 * 60 * 24; // 24 hours after birthday begins
+    const start = new Date().getTime();
+    const end = new Date(this.end).getTime();
     this.timerCount(start, end);
     this.interval = setInterval(() => {
       this.timerCount(start, end);
@@ -120,17 +133,18 @@ export default defineComponent({
 }
 .day {
   display: flex;
-  flex: .3;
+  flex: 0.3;
 }
-.hour, .minute, .second {
+.hour,
+.minute,
+.second {
   display: flex;
-  flex: .15;
+  flex: 0.15;
 }
 .spacer {
   font-size: 60px;
   display: flex;
-  flex: .1;
+  flex: 0.1;
   text-align: center;
 }
-
 </style>

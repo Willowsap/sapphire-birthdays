@@ -1,6 +1,10 @@
 <template>
-  <router-link :to="`/profile/${profile.id}`" class="userLink">
-    <h2 class="title">{{ fullName }}</h2>
+  <router-link
+    :to="`/profile/${profileId}`"
+    class="userLink"
+    v-if="typeof profileId !== 'function'"
+  >
+    <h2 class="title">{{ name }}</h2>
   </router-link>
 </template>
 
@@ -9,15 +13,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "ProfileStub",
-  props: ["profile"],
-  computed: {
-    fullName() {
-      return `${this.profile.fname} ${this.profile.lname}`;
-    },
-    reallyFullName() {
-      return `${this.profile.fname} ${this.profile.mname} ${this.profile.lname}`;
-    },
-  },
+  props: ["profileId", "name"],
 });
 </script>
 

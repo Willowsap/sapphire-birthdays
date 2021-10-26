@@ -1,60 +1,17 @@
 <template>
-  <form @submit.prevent="createProfile">
-    <div class="name">
-      <input type="text" v-model="fname" placeholder="First Name" required/>
-      <input type="text" v-model="mname" placeholder="Middle Name"/>
-      <input type="text" v-model="lname" placeholder="Last Name"/>
-    </div>
-    <div class="birthday">
-      <input type="date" v-model="birthday" required/>
-    </div>
-    <div class="about">
-      <textarea v-model="about" placeholder="About" />
-    </div>
-    <button>Submit</button>
-  </form>
+  <profile-form />
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
+import ProfileForm from "@/components/profile/ProfileForm.vue";
 
-export default defineComponent ({
-  data() {
-    return {
-      fname: "",
-      mname: "",
-      lname: "",
-      about: "",
-      birthday: ""
-    }
+export default defineComponent({
+  name: "ProfileCreate",
+  components: {
+    ProfileForm,
   },
-  methods: {
-    createProfile() {
-      this.$store.commit('addProfile', {
-        id: "nfldln",
-        fname: this.fname,
-        mname: this.mname,
-        lname: this.lname,
-        about: this.about,
-        birthday: this.birthday
-      })
-      this.$router.push('/');
-    }
-  }
-})
+});
 </script>
 
-<style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.name {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-}
-</style>
+<style scoped></style>

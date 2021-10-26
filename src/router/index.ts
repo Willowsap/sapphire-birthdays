@@ -9,10 +9,10 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/profile/:profileId",
-    name: "Profile",
+    name: "ProfilePage",
     props: true,
     component: () =>
-      import(/* webpackChunkName: "profile" */ "../views/Profile.vue")
+      import(/* webpackChunkName: "profile" */ "../views/ProfilePage.vue")
   },
   {
     path: "/create",

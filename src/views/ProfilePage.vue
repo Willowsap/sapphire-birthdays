@@ -1,9 +1,7 @@
 <template>
-  <div class="profile">
-    <normal-profile v-if="!isBirthday" :profileId="profileId"/>
-    <birthday-profile v-if="isBirthday" :profileId="profileId"/>
-    <router-link :to="`/edit/${profileId}`">Edit</router-link>
-  </div>
+  <normal-profile v-if="!isBirthday" :profileId="profileId" />
+  <birthday-profile v-if="isBirthday" :profileId="profileId" />
+  <router-link :to="`/edit/${profileId}`">Edit</router-link>
 </template>
 
 <script lang="ts">
@@ -12,7 +10,7 @@ import BirthdayProfile from "@/components/birthday/BirthdayProfile.vue";
 import NormalProfile from "@/components/profile/NormalProfile.vue";
 
 export default defineComponent({
-  name: "Profile",
+  name: "ProfilePage",
   components: {
     NormalProfile,
     BirthdayProfile,
@@ -22,24 +20,24 @@ export default defineComponent({
   },
   data() {
     return {
-      profile: this.$store.state.profiles.find((e: any) => e.id === this.profileId)
+      profile: this.$store.dispatch("getProfile", this.profileId),
     };
   },
   computed: {
     isBirthday() {
       const now = new Date();
       const bday = new Date(this.profile.birthday);
-      if (now.getMonth() === bday.getMonth() && now.getDate() === bday.getDate()) {
+      if (
+        now.getMonth() === bday.getMonth() &&
+        now.getDate() === bday.getDate()
+      ) {
         return true;
       } else {
         return false;
       }
     },
-    
   },
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -12,9 +12,9 @@ import TheFooter from "./components/TheFooter.vue";
 export default defineComponent({
   components: {
     TheHeader,
-    TheFooter
-  }
-})
+    TheFooter,
+  },
+});
 </script>
 
 <style>
@@ -23,7 +23,7 @@ body {
   height: 100%;
 }
 #app {
-  font-family: 'Zen Kurenaido', sans-serif;
+  font-family: "Zen Kurenaido", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

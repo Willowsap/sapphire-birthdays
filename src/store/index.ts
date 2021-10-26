@@ -1,59 +1,93 @@
-import { Profile } from '@/models/profile.model';
 import { createStore } from "vuex";
+import axios from "axios";
+import { ServerProfile } from "@/models/serverProfile.model";
+import { Profile } from "@/models/profile.model";
+
+const url = "http://localhost:3000/api/profiles";
+
+const transformId = (profileList: Array<ServerProfile>): Array<Profile> => {
+  return profileList.map((item: ServerProfile) => {
+    return {
+      id: item._id,
+      fname: item.fname,
+      mname: item.mname,
+      lname: item.lname,
+      about: item.about,
+      birthday: item.birthday,
+    };
+  });
+};
 
 export default createStore({
   state: {
     profiles: [
       {
-        id: "1",
-        fname: "Willow",
-        mname: "Emmeliine",
-        lname: "Sapphire",
-        birthday: "10/25/1994",
-        about: "meee",
-      },
-      {
-        id: "2",
-        fname: "Cei",
-        mname: "Claire",
-        lname: "Wendland",
-        birthday: "02/08/1992",
-        about: "ceeeiiiii",
-      },
-      {
-        id: "3",
-        fname: "Yuri",
-        mname: "Bo",
-        lname: "Wendland-Sapphire",
-        birthday: "06/3/2020",
-        about: "baby1",
-      },
-      {
-        id: "4",
-        fname: "Merida",
-        mname: "Owl",
-        lname: "Wendland-Sapphire",
-        birthday: "11/24/2020",
-        about: "baby2",
+        id: String,
+        fname: String,
+        mname: String,
+        lname: String,
+        birthday: String,
+        about: String,
       },
     ],
   },
+  getters: {
+    profileList(state) {
+      if (state.profiles.length > 0) {
+        return state.profiles;
+      } else {
+        return [];
+      }
+    },
+  },
   mutations: {
+    setProfiles(state, profiles) {
+      state.profiles = profiles;
+    },
     addProfile(state, profile) {
       state.profiles.push(profile);
     },
-    updateProfile(state, profile: Profile) {
-      const prf: Profile | undefined = state.profiles.find((e: any) => e.id === this.id);
+    updateProfile(state, profile) {
+      const prf = state.profiles.find((e) => e.id === profile.id);
       if (!prf) {
         console.warn("Tried to update a non-existant profile");
       } else {
-        prf['fname'] = profile['fname'] 
-        prf['mname'] = profile['mname'] 
-        prf['lname'] = profile['lname'] 
-        prf['about'] = profile['about'] 
-        prf['birthday'] = profile['birthday'] 
+        prf["fname"] = profile["fname"];
+        prf["mname"] = profile["mname"];
+        prf["lname"] = profile["lname"];
+        prf["about"] = profile["about"];
+        prf["birthday"] = profile["birthday"];
       }
-    }
+    },
   },
-  modules: {},
+  actions: {
+    getProfile(context, id) {
+      return context.state.profiles.find((e) => e.id === id);
+    },
+    loadProfiles(context) {
+      console.log("loading profiles");
+      axios
+        .get(url)
+        .then((res) => {
+          context.commit("setProfiles", transformId(res.data));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    createProfile(context, profile) {
+      axios.post(url, profile).then((res) => {
+        if (res.status) {
+          context.commit("addProfile", profile);
+        }
+      });
+    },
+    editProfile(context, profile) {
+      axios.put(url, profile).then((res) => {
+        if (res.status) {
+          context.commit("updateProfile", profile);
+        }
+      });
+    },
+  },
 });
