@@ -1,6 +1,20 @@
 <template>
-  <label for="query">Search</label>
-  <input type="text" name="query" id="query" v-model="query" />
+  <section class="actions">
+    <input
+      type="text"
+      name="query"
+      id="query"
+      class="query"
+      v-model="query"
+      placeholder="Search"
+    />
+    <profile-paginator
+      :items="queriedItems"
+      @onChange="updatePage"
+      v-if="!loading"
+      class="paginator"
+    />
+  </section>
   <ul v-if="!loading">
     <profile-stub
       v-for="profile in pageOfItems"
@@ -9,8 +23,6 @@
       :name="`${profile.fname} ${profile.lname}`"
     />
   </ul>
-  <profile-paginator :items="queriedItems" @onChange="updatePage" v-if="!loading" />
-  <h2 v-if="profiles.length === 0">No Profiles Yet</h2>
 </template>
 
 <script lang="ts">
@@ -18,6 +30,7 @@ import { defineComponent } from "vue";
 import { mapState } from "vuex";
 import ProfileStub from "@/components/ProfileStub.vue";
 import ProfilePaginator from "@/components/ProfilePaginator.vue";
+import { Profile } from "@/models/profile.model";
 
 export default defineComponent({
   name: "ProfileList",
@@ -29,21 +42,29 @@ export default defineComponent({
     return {
       loading: false,
       perPage: 2,
-      pageOfItems: [],
-      queriedItems: this.$store.state.profiles,
+      pageOfItems: this.$store.state.profiles,
       query: "",
     };
   },
   computed: {
     ...mapState(["profiles"]),
+    queriedItems() {
+      if (this.query) {
+        return this.$store.state.profiles.filter((e: Profile) => {
+          return (
+            e["fname"].indexOf(this.query) !== -1 ||
+            e["lname"].indexOf(this.query) !== -1
+          );
+        });
+      } else {
+        return this.$store.state.profiles;
+      }
+    },
   },
   methods: {
-    updatePage(newItems: any) {
+    updatePage(newItems: Array<Profile>) {
       this.pageOfItems = newItems;
     },
-    search(newItems: any) {
-      this.queriedItems = newItems;
-    }
   },
   mounted() {
     if (!this.profiles) {
@@ -63,6 +84,23 @@ ul {
   width: 100%;
   margin: 0px;
   padding: 0px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.actions {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.query {
+  flex: 0.3;
+  max-width: 250px;
+  min-width: 10px;
+}
+.paginator {
+  flex: 1;
 }
 </style>

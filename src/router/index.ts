@@ -15,6 +15,13 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "profile" */ "../views/ProfilePage.vue"),
   },
   {
+    path: "/baby",
+    name: "BabyPage",
+    props: true,
+    component: () =>
+      import(/* webpackChunkName: "profile" */ "../views/BabyPage.vue"),
+  },
+  {
     path: "/create",
     name: "ProfileCreate",
     props: false,

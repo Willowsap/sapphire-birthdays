@@ -1,13 +1,26 @@
 <template>
   <nav class="paginator">
     <ul class="buttonList">
-      <button v-for="buttonNum in numButtons" :key="buttonNum" @click="goToPage(buttonNum)" class="pageButton">
+      <button
+        v-for="buttonNum in numButtons"
+        :key="buttonNum"
+        @click="goToPage(buttonNum)"
+        :class="{ pageButton: true, activePage: buttonNum === page }"
+      >
         {{ buttonNum }}
       </button>
     </ul>
     <section class="numSelection">
-      <label for="perPage">Number of Items Per Page</label>
-      <input type="number" name="perPage" id="perPage" v-model="numPerPage" @input="goToPage(page)" min="1" :max="numItems"/>
+      <label for="perPage">Items Per Page</label>
+      <input
+        type="number"
+        name="perPage"
+        id="perPage"
+        v-model="numPerPage"
+        @input="goToPage(page)"
+        min="1"
+        :max="numItems"
+      />
     </section>
   </nav>
 </template>
@@ -17,9 +30,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "ProfilePaginator",
-  emits: [
-    "onChange",
-  ],
+  emits: ["onChange"],
   props: {
     items: {
       type: Array,
@@ -27,7 +38,7 @@ export default defineComponent({
     },
     perPage: {
       type: Number,
-      default: 2
+      default: 2,
     },
   },
   data() {
@@ -45,9 +56,16 @@ export default defineComponent({
     },
     pageItems() {
       const startIndex = this.numPerPage * (this.page - 1);
-      const endIndex = startIndex + (this.numPerPage > this.numItems ? this.numItems : this.numPerPage);
+      const endIndex =
+        startIndex +
+        (this.numPerPage > this.numItems ? this.numItems : this.numPerPage);
       return this.items.slice(startIndex, endIndex);
-    }
+    },
+  },
+  watch: {
+    items() {
+      this.goToPage(1);
+    },
   },
   methods: {
     getItemsInPage() {
@@ -66,25 +84,29 @@ export default defineComponent({
   },
   mounted() {
     this.goToPage(this.page);
-  }
+  },
 });
 </script>
 
 <style scoped>
 .paginator {
-  width: 100%;
   display: flex;
   flex-direction: column;
-
-  border: 1px;
-  border-style: solid;
-  border-color: black;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.numSelection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 .buttonList {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  overflow-x: auto;
 }
 .pageButton {
   font-family: "Zen Kurenaido", sans-serif;
@@ -104,8 +126,16 @@ export default defineComponent({
   border-color: white;
 }
 input[type="number"] {
+  font-family: "Zen Kurenaido", sans-serif;
+  border: none;
   margin-left: 5px;
   width: 40px;
   height: 20px;
+}
+.activePage {
+  background-color: #968298;
+  border: 1px;
+  border-style: solid;
+  border-color: white;
 }
 </style>
