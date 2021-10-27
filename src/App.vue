@@ -1,7 +1,7 @@
 <template>
   <the-header />
   <router-view v-if="!loading" />
-  <h1 v-else>loading</h1>
+  <h1 v-else>loading...</h1>
   <the-footer />
 </template>
 
@@ -9,6 +9,7 @@
 import { defineComponent } from "vue";
 import TheHeader from "./components/TheHeader.vue";
 import TheFooter from "./components/TheFooter.vue";
+import { mapState } from "vuex";
 
 export default defineComponent({
   components: {
@@ -28,7 +29,7 @@ export default defineComponent({
       });
     },
   },
-  mounted() {
+  created() {
     this.loadProfiles();
   },
 });

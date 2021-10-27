@@ -67,15 +67,9 @@ export default createStore({
     },
   },
   actions: {
-    loadProfiles(context) {
-      axios
-        .get(url)
-        .then((res) => {
-          context.commit("setProfiles", transformId(res.data));
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    async loadProfiles(context) {
+      const res = await axios.get(url);
+      context.commit("setProfiles", transformId(res.data));
     },
     createProfile(context, profile) {
       axios.post(url, profile).then((res) => {
