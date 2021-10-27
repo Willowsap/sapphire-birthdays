@@ -7,6 +7,11 @@
   </div>
   <countdown-timer :end="nextBirthday" v-if="!isBirthday" />
   <birthday-countdown v-else />
+  <profile-image
+    v-if="profile.imagePath"
+    :image="profile.imagePath"
+    :alt="profile.fname + profile.lname"
+  />
   <birthday-fun v-if="isBirthday" />
   <router-link :to="`/edit/${profileId}`">Edit</router-link>
 </template>
@@ -17,6 +22,7 @@ import CountdownTimer from "@/components/CountdownTimer.vue";
 import { Profile } from "@/models/profile.model";
 import BirthdayCountdown from "@/components/birthday/BirthdayCountdown.vue";
 import BirthdayFun from "@/components/birthday/BirthdayFun.vue";
+import ProfileImage from "@/components/ProfileImage.vue";
 
 export default defineComponent({
   name: "ProfilePage",
@@ -24,6 +30,7 @@ export default defineComponent({
     CountdownTimer,
     BirthdayCountdown,
     BirthdayFun,
+    ProfileImage,
   },
   props: {
     profileId: String,

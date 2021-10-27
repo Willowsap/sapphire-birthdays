@@ -5,4 +5,5 @@ export interface Profile {
   lname: string;
   birthday: string;
   about: string;
+  imagePath: string;
 }

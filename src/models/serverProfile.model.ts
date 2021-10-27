@@ -5,4 +5,5 @@ export interface ServerProfile {
   lname: string;
   birthday: string;
   about: string;
+  imagePath: string;
 }

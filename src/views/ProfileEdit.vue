@@ -18,6 +18,13 @@
       <label for="bday">Birthday (required)</label>
       <input type="date" v-model="birthday" name="bday" id="bday" required />
     </div>
+    <div class="image">
+      <button type="button" @click="$refs.filePicker.click()">
+        Pick Image
+      </button>
+      <input type="file" ref="filePicker" @change="onImagePicked($event)" />
+    </div>
+    <profile-image v-if="imagePath" :image="imagePath" :alt="fname + lname" />
     <div class="about">
       <textarea
         v-model="about"
@@ -29,12 +36,15 @@
   </form>
 </template>
 
-<script lang="ts">
-import { Profile } from "@/models/profile.model";
+<script>
 import { defineComponent } from "vue";
+import ProfileImage from "@/components/ProfileImage.vue";
 
 export default defineComponent({
   name: "ProfileForm",
+  components: {
+    ProfileImage,
+  },
   props: {
     profileId: {
       type: String,
@@ -48,6 +58,8 @@ export default defineComponent({
       lname: "",
       about: "",
       birthday: "",
+      imagePath: "",
+      image: null,
     };
   },
   methods: {
@@ -65,6 +77,7 @@ export default defineComponent({
         lname: this.lname,
         about: this.about,
         birthday: this.birthday,
+        image: this.image,
       });
       this.$router.push("/");
     },
@@ -76,20 +89,32 @@ export default defineComponent({
         lname: this.lname,
         about: this.about,
         birthday: this.birthday,
+        image: this.image,
+        imagePath: this.imagePath,
       });
       this.$router.push(`/profile/${this.profileId}`);
+    },
+    onImagePicked(event) {
+      const file = event.target.files[0];
+      this.image = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePath = reader.result;
+      };
+      reader.readAsDataURL(file);
     },
   },
   mounted() {
     if (this.profileId !== "new") {
       const prf = this.$store.getters.profileList.find(
-        (e: Profile) => e.id === this.profileId
+        (e) => e.id === this.profileId
       );
       this.fname = prf.fname;
       this.mname = prf.mname;
       this.lname = prf.lname;
       this.about = prf.about;
       this.birthday = prf.birthday;
+      this.imagePath = prf.imagePath;
     }
   },
 });
@@ -126,7 +151,12 @@ input[type="text"] {
   margin: 10px;
 }
 
+input[type="file"] {
+  display: none;
+}
+
 textarea {
+  margin-top: 1rem;
   width: 250px;
   height: 100px;
 }
@@ -144,5 +174,15 @@ button {
 button:hover {
   cursor: pointer;
   background-color: rgb(226, 196, 226);
+}
+
+.imagePreview {
+  height: 15rem;
+  margin: 1rem 0;
+}
+
+.imagePreview img {
+  border-radius: 50%;
+  height: 100%;
 }
 </style>

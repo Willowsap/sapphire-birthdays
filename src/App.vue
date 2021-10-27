@@ -38,6 +38,7 @@ export default defineComponent({
 body {
   background-color: #968298;
   height: 100%;
+  overflow-x: hidden;
 }
 #app {
   font-family: "Zen Kurenaido", sans-serif;

@@ -15,6 +15,7 @@ const transformId = (profileList: Array<ServerProfile>): Array<Profile> => {
       lname: item.lname,
       about: item.about,
       birthday: item.birthday,
+      imagePath: item.imagePath,
     };
   });
 };
@@ -29,6 +30,7 @@ export default createStore({
         lname: String,
         birthday: String,
         about: String,
+        imagePath: String,
       },
     ],
   },
@@ -58,6 +60,7 @@ export default createStore({
         prf["lname"] = profile["lname"];
         prf["about"] = profile["about"];
         prf["birthday"] = profile["birthday"];
+        prf["imagePath"] = profile["imagePath"];
       }
     },
     removeProfile(state, profileId) {
@@ -72,18 +75,71 @@ export default createStore({
       context.commit("setProfiles", transformId(res.data));
     },
     createProfile(context, profile) {
-      axios.post(url, profile).then((res) => {
-        if (res.status) {
-          context.commit("addProfile", profile);
-        }
-      });
+      if (!profile.image) {
+        axios.post(url, profile).then((res) => {
+          if (res.status) {
+            context.commit("addProfile", profile);
+          }
+        });
+      } else {
+        const profileData = new FormData();
+        profileData.append("fname", profile.fname);
+        profileData.append("mname", profile.mname);
+        profileData.append("lname", profile.lname);
+        profileData.append("about", profile.about);
+        profileData.append("birthday", profile.birthday);
+        profileData.append(
+          "image",
+          profile.image,
+          profile.fname + profile.lname
+        );
+        axios
+          .post(url, profileData, {
+            headers: {
+              "content-type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            if (res.status) {
+              context.commit("addProfile", profile);
+            }
+          });
+      }
     },
     editProfile(context, profile) {
-      axios.put(url, profile).then((res) => {
-        if (res.status) {
-          context.commit("updateProfile", profile);
-        }
-      });
+      if (!profile.image) {
+        axios.put(url + `/${profile.id}`, profile).then((res) => {
+          if (res.status) {
+            context.commit("updateProfile", profile);
+          }
+        });
+      } else {
+        const profileData = new FormData();
+        profileData.append("id", profile.id);
+        profileData.append("fname", profile.fname);
+        profileData.append("mname", profile.mname);
+        profileData.append("lname", profile.lname);
+        profileData.append("about", profile.about);
+        profileData.append("birthday", profile.birthday);
+        profileData.append(
+          "image",
+          profile.image,
+          profile.fname + profile.lname
+        );
+        axios
+          .put(url + `/${profile.id}`, profileData, {
+            headers: {
+              "content-type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              console.log(res);
+              profile.imagePath = res.data.imagePath;
+              context.commit("updateProfile", profile);
+            }
+          });
+      }
     },
     deleteProfile(context, profileId) {
       axios.delete(url, profileId).then((res) => {
