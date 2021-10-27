@@ -71,27 +71,13 @@ export default defineComponent({
     },
   },
   mounted() {
-    const start = new Date().getTime();
     const end = new Date(this.end).getTime();
-    this.timerCount(start, end);
+    this.setTimeVars(end - new Date().getTime());
     this.interval = setInterval(() => {
-      this.timerCount(start, end);
+      this.setTimeVars(end - new Date().getTime());
     }, 1000);
   },
   methods: {
-    timerCount(start: number, end: number) {
-      let now = new Date().getTime();
-      let distance = start - now;
-      let passTime = end - now;
-      if (distance < 0 && passTime < 0) {
-        clearInterval(this.interval);
-        return;
-      } else if (distance < 0 && passTime > 0) {
-        this.setTimeVars(passTime);
-      } else if (distance > 0 && passTime > 0) {
-        this.setTimeVars(distance);
-      }
-    },
     setTimeVars(dist: number) {
       this.days = Math.floor(dist / (1000 * 60 * 60 * 24));
       this.hours = Math.floor(

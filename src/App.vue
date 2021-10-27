@@ -1,6 +1,7 @@
 <template>
   <the-header />
-  <router-view />
+  <router-view v-if="!loading" />
+  <h1 v-else>loading</h1>
   <the-footer />
 </template>
 
@@ -13,6 +14,22 @@ export default defineComponent({
   components: {
     TheHeader,
     TheFooter,
+  },
+  data() {
+    return {
+      loading: false,
+    };
+  },
+  methods: {
+    loadProfiles() {
+      this.loading = true;
+      this.$store.dispatch("loadProfiles").then(() => {
+        this.loading = false;
+      });
+    },
+  },
+  mounted() {
+    this.loadProfiles();
   },
 });
 </script>

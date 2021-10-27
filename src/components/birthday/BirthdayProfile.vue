@@ -13,7 +13,6 @@
 import { defineComponent } from "vue";
 import BirthdayFun from "@/components/birthday/BirthdayFun.vue";
 import BirthdayCountdown from "@/components/birthday/BirthdayCountdown.vue";
-import { Profile } from "@/models/profile.model";
 
 export default defineComponent({
   name: "NormalProfile",
@@ -21,14 +20,7 @@ export default defineComponent({
     BirthdayFun,
     BirthdayCountdown,
   },
-  props: ["profileId"],
-  data() {
-    return {
-      profile: this.$store.state.profiles.find(
-        (e: Profile) => e.id === this.profileId
-      ),
-    };
-  },
+  props: ["profile"],
 });
 </script>
 

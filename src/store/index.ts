@@ -62,11 +62,7 @@ export default createStore({
     },
   },
   actions: {
-    getProfile(context, id) {
-      return context.state.profiles.find((e) => e.id === id);
-    },
     loadProfiles(context) {
-      console.log("loading profiles");
       axios
         .get(url)
         .then((res) => {

@@ -11,21 +11,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import CountdownTimer from "@/components/CountdownTimer.vue";
-import { Profile } from "@/models/profile.model";
 
 export default defineComponent({
   name: "NormalProfile",
   components: {
     CountdownTimer,
   },
-  props: ["profileId"],
-  data() {
-    return {
-      profile: this.$store.state.profiles.find(
-        (e: Profile) => e.id === this.profileId
-      ),
-    };
-  },
+  props: ["profile"],
   computed: {
     nextBirthday() {
       const now = new Date();
