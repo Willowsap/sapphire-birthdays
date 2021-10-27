@@ -60,6 +60,11 @@ export default createStore({
         prf["birthday"] = profile["birthday"];
       }
     },
+    removeProfile(state, profileId) {
+      state.profiles = state.profiles.filter((item) => {
+        return item.id !== profileId;
+      });
+    },
   },
   actions: {
     loadProfiles(context) {
@@ -83,6 +88,13 @@ export default createStore({
       axios.put(url, profile).then((res) => {
         if (res.status) {
           context.commit("updateProfile", profile);
+        }
+      });
+    },
+    deleteProfile(context, profileId) {
+      axios.delete(url, profileId).then((res) => {
+        if (res.status) {
+          context.commit("removeProfile", profileId);
         }
       });
     },

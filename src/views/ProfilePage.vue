@@ -1,20 +1,23 @@
 <template>
-  <normal-profile v-if="!isBirthday && profile" :profile="profile" />
-  <birthday-profile v-if="isBirthday && profile" :profile="profile" />
-  <!--<router-link :to="`/edit/${profileId}`">Edit</router-link>-->
+  <div class="info">
+    <h2 class="name">
+      {{ profile.fname + " " + profile.lname }}<br />
+      {{ profile.birthday }}
+    </h2>
+  </div>
+  <countdown-timer :end="nextBirthday" />
+  <router-link :to="`/edit/${profileId}`">Edit</router-link>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import BirthdayProfile from "@/components/birthday/BirthdayProfile.vue";
-import NormalProfile from "@/components/profile/NormalProfile.vue";
+import CountdownTimer from "@/components/CountdownTimer.vue";
 import { Profile } from "@/models/profile.model";
 
 export default defineComponent({
   name: "ProfilePage",
   components: {
-    NormalProfile,
-    BirthdayProfile,
+    CountdownTimer,
   },
   props: {
     profileId: String,
@@ -40,8 +43,29 @@ export default defineComponent({
         return false;
       }
     },
+    nextBirthday() {
+      const now = new Date();
+      const next = new Date(this.profile.birthday);
+      next.setFullYear(now.getFullYear());
+      if (next.getTime() - now.getTime() < 0) {
+        next.setFullYear(next.getFullYear() + 1);
+      }
+      return next;
+    },
   },
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.info {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  justify-content: flex-start;
+  flex: 0.5;
+}
+.name {
+  font-family: "Zen Kurenaido", sans-serif;
+  font-kerning: 1px;
+}
+</style>

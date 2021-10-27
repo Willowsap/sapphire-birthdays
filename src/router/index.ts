@@ -12,21 +12,21 @@ const routes: Array<RouteRecordRaw> = [
     name: "ProfilePage",
     props: true,
     component: () =>
-      import(/* webpackChunkName: "profile" */ "../views/ProfilePage.vue")
+      import(/* webpackChunkName: "profile" */ "../views/ProfilePage.vue"),
   },
   {
     path: "/create",
     name: "ProfileCreate",
     props: false,
     component: () =>
-      import(/* webpackChunkName: "create" */ "../views/ProfileCreate.vue")
+      import(/* webpackChunkName: "create" */ "../views/ProfileEdit.vue"),
   },
   {
     path: "/edit/:profileId",
     name: "ProfileEdit",
     props: true,
     component: () =>
-      import(/* webpackChunkName: "edit" */ "../views/ProfileEdit.vue")
+      import(/* webpackChunkName: "edit" */ "../views/ProfileEdit.vue"),
   },
 ];
 
