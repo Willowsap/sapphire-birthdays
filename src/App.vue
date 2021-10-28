@@ -30,6 +30,7 @@ export default defineComponent({
   },
   created() {
     this.loadProfiles();
+    this.$store.dispatch("autoLogIn");
   },
 });
 </script>
@@ -38,6 +39,8 @@ export default defineComponent({
 body {
   background-color: #968298;
   height: 100%;
+  width: 80%;
+  margin-left: 10%;
   overflow-x: hidden;
 }
 #app {
@@ -47,16 +50,13 @@ body {
   text-align: center;
   color: white;
 }
-
 #nav {
   padding: 30px;
 }
-
 #nav a {
   font-weight: bold;
   color: #2c3e50;
 }
-
 #nav a.router-link-exact-active {
   color: #42b983;
 }

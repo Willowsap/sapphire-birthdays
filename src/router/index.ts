@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import ProfileList from "../views/ProfileList.vue";
+import store from "@/store";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,6 +26,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/create",
     name: "ProfileCreate",
     props: false,
+    meta: { requiresAuth: true },
     component: () =>
       import(/* webpackChunkName: "create" */ "../views/ProfileEdit.vue"),
   },
@@ -32,14 +34,41 @@ const routes: Array<RouteRecordRaw> = [
     path: "/edit/:profileId",
     name: "ProfileEdit",
     props: true,
+    meta: { requiresAuth: true },
     component: () =>
       import(/* webpackChunkName: "edit" */ "../views/ProfileEdit.vue"),
+  },
+  {
+    path: "/signUp",
+    name: "SignUpPage",
+    props: true,
+    meta: { requiresUnauth: true },
+    component: () =>
+      import(/* webpackChunkName: "edit" */ "../views/auth/SignUpPage.vue"),
+  },
+  {
+    path: "/signIn",
+    name: "SignInPage",
+    props: true,
+    meta: { requiresUnauth: true },
+    component: () =>
+      import(/* webpackChunkName: "edit" */ "../views/auth/SignInPage.vue"),
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, _, next) => {
+  if (to.meta.requiresAuth && !store.getters.isSignedIn) {
+    next("/signIn");
+  } else if (to.meta.requiresUnauth && store.getters.isSignedIn) {
+    next("/");
+  } else {
+    next();
+  }
 });
 
 export default router;

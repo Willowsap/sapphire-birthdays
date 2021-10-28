@@ -13,7 +13,7 @@
     :alt="profile.fname + profile.lname"
   />
   <birthday-fun v-if="isBirthday" />
-  <router-link :to="`/edit/${profileId}`">Edit</router-link>
+  <router-link :to="`/edit/${profileId}`" v-if="authorized">Edit</router-link>
 </template>
 
 <script lang="ts">
@@ -37,7 +37,7 @@ export default defineComponent({
   },
   computed: {
     profile() {
-      return this.$store.getters.profileList.find(
+      return this.$store.getters.profiles.find(
         (e: Profile) => e.id === this.profileId
       );
     },
@@ -64,6 +64,13 @@ export default defineComponent({
         next.setFullYear(next.getFullYear() + 1);
       }
       return next;
+    },
+    authorized() {
+      console.log(this.profile.email)
+      return (
+        this.$store.getters.isSignedIn &&
+        this.$store.getters.email === this.profile.email
+      );
     },
   },
 });

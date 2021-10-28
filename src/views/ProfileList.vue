@@ -42,7 +42,7 @@ export default defineComponent({
     return {
       loading: false,
       perPage: 2,
-      pageOfItems: this.$store.state.profiles,
+      pageOfItems: this.$store.getters.profiles,
       query: "",
     };
   },
@@ -50,14 +50,14 @@ export default defineComponent({
     ...mapState(["profiles"]),
     queriedItems() {
       if (this.query) {
-        return this.$store.state.profiles.filter((e: Profile) => {
+        return this.$store.getters.profiles.filter((e: Profile) => {
           return (
             e["fname"].indexOf(this.query) !== -1 ||
             e["lname"].indexOf(this.query) !== -1
           );
         });
       } else {
-        return this.$store.state.profiles;
+        return this.$store.getters.profiles;
       }
     },
   },

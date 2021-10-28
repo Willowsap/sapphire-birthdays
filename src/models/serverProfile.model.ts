@@ -1,5 +1,6 @@
 export interface ServerProfile {
   _id: string;
+  email: string;
   fname: string;
   mname: string;
   lname: string;

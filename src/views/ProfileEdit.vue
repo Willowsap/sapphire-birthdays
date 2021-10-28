@@ -33,6 +33,14 @@
     </div>
     <button>Submit</button>
     <slot />
+    <button
+      type="button"
+      class="warn"
+      v-if="profileId !== 'new'"
+      @click="deletePrf"
+    >
+      Delete
+    </button>
   </form>
 </template>
 
@@ -62,6 +70,11 @@ export default defineComponent({
       image: null,
     };
   },
+  computed: {
+    email() {
+      return this.$store.getters.email;
+    },
+  },
   methods: {
     submitForm() {
       if (this.profileId === "new") {
@@ -72,25 +85,26 @@ export default defineComponent({
     },
     createProfile() {
       this.$store.dispatch("createProfile", {
+        email: this.email,
         fname: this.fname,
         mname: this.mname,
         lname: this.lname,
         about: this.about,
         birthday: this.birthday,
-        image: this.image,
+        imagePath: this.image,
       });
       this.$router.push("/");
     },
     updateProfile() {
       this.$store.dispatch("editProfile", {
         id: this.profileId,
+        email: this.email,
         fname: this.fname,
         mname: this.mname,
         lname: this.lname,
         about: this.about,
         birthday: this.birthday,
-        image: this.image,
-        imagePath: this.imagePath,
+        imagePath: this.image ? this.image : this.imagePath,
       });
       this.$router.push(`/profile/${this.profileId}`);
     },
@@ -103,10 +117,15 @@ export default defineComponent({
       };
       reader.readAsDataURL(file);
     },
+    deletePrf() {
+      this.$store.dispatch("deleteProfile", this.profileId).then(() => {
+        this.$router.push("/");
+      });
+    },
   },
   mounted() {
     if (this.profileId !== "new") {
-      const prf = this.$store.getters.profileList.find(
+      const prf = this.$store.getters.profiles.find(
         (e) => e.id === this.profileId
       );
       this.fname = prf.fname;
@@ -162,6 +181,7 @@ textarea {
 }
 
 button {
+  margin-top: 10px;
   border: none;
   padding-right: 10px;
   padding-left: 10px;
@@ -184,5 +204,9 @@ button:hover {
 .imagePreview img {
   border-radius: 50%;
   height: 100%;
+}
+
+.warn {
+  background-color: red;
 }
 </style>
