@@ -17,7 +17,6 @@ export default defineComponent({
 .footer {
   width: 100%;
   display: flex;
-  flex: 1;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -26,8 +25,8 @@ export default defineComponent({
   position: absolute;
 }
 .baby {
+  flex: 1;
   text-decoration: none;
   color: white;
-  margin-right: 20px;
 }
 </style>

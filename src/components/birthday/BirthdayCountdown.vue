@@ -2,8 +2,10 @@
   <countdown-timer :end="birthdayEnd">
     <template #default="slotProps">
       <div class="cd">
-        <span class="number">{{ slotProps.hours }}:</span>
-        <span class="number">{{ slotProps.minutes }}:</span>
+        <span class="number">{{ slotProps.hours }}</span>
+        <span class="spacer">:</span>
+        <span class="number">{{ slotProps.minutes }}</span>
+        <span class="spacer">:</span>
         <span class="number">{{ slotProps.seconds }}</span>
       </div>
     </template>
@@ -34,6 +36,15 @@ export default defineComponent({
 
 <style scoped>
 .cd {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.spacer,
+.number {
   font-size: 20px;
+  font-weight: bold;
+  margin-left: 2px;
 }
 </style>

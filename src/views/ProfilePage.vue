@@ -12,7 +12,7 @@
     :image="profile.imagePath"
     :alt="profile.fname + profile.lname"
   />
-  <birthday-fun v-if="isBirthday" />
+  <birthday-fun v-if="isBirthday" :profile="profile"/>
   <router-link :to="`/edit/${profileId}`" v-if="authorized">Edit</router-link>
 </template>
 
