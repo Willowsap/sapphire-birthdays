@@ -3,7 +3,7 @@ import profileModule from "@/store/modules/profiles/index";
 import authModule from "@/store/modules/auth/index";
 
 export default createStore({
-  state() {
+  state(): Record<string, never> {
     return {};
   },
   modules: {

@@ -1,26 +1,38 @@
 import axios from "axios";
 import transformId from "@/store/utils/transformProfile";
 import { Profile } from "@/models/profile.model";
+import { ProfileState } from "@/store/models/profileState.model";
+import { ActionContext } from "vuex";
+import { ServerProfile } from "@/models/serverProfile.model";
 
 const url = "https://sapphire-birthdays-server.herokuapp.com/api/profiles";
 // const url = "http://localhost:3000/api/profiles";
 
 export default {
-  async loadProfiles(context: any): Promise<void> {
+  async loadProfiles(
+    context: ActionContext<ProfileState, Record<string, never>>
+  ): Promise<void> {
     const res = await axios.get(url);
     context.commit("setProfiles", transformId(res.data));
   },
-  createProfile(context: any, profile: Profile): void {
+  async createProfile(
+    context: ActionContext<ProfileState, Record<string, never>>,
+    profile: Profile
+  ): Promise<string> {
     if (typeof profile.imagePath === "string" || !profile.imagePath) {
-      axios
+      return axios
         .post(url, profile, {
           headers: {
             authorization: context.getters.token,
           },
         })
         .then((res) => {
-          if (res.status) {
-            context.commit("addProfile", profile);
+          if (res.status === 201) {
+            context.commit("addProfile", transformId([res.data.profile])[0]);
+            return res.data.profile._id;
+          } else {
+            alert("Failed to create profile");
+            return "failed";
           }
         });
     } else {
@@ -36,21 +48,28 @@ export default {
         profile.imagePath,
         profile.fname + profile.lname
       );
-      axios
-        .post(url, profileData, {
+      return axios
+        .post<{ message: string; profile: ServerProfile }>(url, profileData, {
           headers: {
             "content-type": "multipart/form-data",
             authorization: context.getters.token,
           },
         })
         .then((res) => {
-          if (res.status) {
-            context.commit("addProfile", profile);
+          if (res.status === 201) {
+            context.commit("addProfile", transformId([res.data.profile])[0]);
+            return res.data.profile._id;
+          } else {
+            alert("Failed to create profile");
+            return "failed";
           }
         });
     }
   },
-  editProfile(context: any, profile: Profile): void {
+  editProfile(
+    context: ActionContext<ProfileState, Record<string, never>>,
+    profile: Profile
+  ): void {
     if (typeof profile.imagePath === "string") {
       axios
         .put(url + `/${profile.id}`, profile, {
@@ -93,7 +112,10 @@ export default {
         });
     }
   },
-  deleteProfile(context: any, profileId: string): void {
+  deleteProfile(
+    context: ActionContext<ProfileState, Record<string, never>>,
+    profileId: string
+  ): void {
     axios
       .delete(url + `/${profileId}`, {
         headers: {

@@ -17,18 +17,18 @@
   </ul>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "TheHeader",
   computed: {
-    signedIn() {
+    signedIn(): boolean {
       return this.$store.getters.isSignedIn;
     },
   },
   methods: {
-    logout() {
+    logout(): void {
       this.$store.dispatch("logout");
     },
   },

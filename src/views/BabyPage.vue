@@ -2,7 +2,7 @@
   <profile-page profileId="baby" />
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import ProfilePage from "@/views/ProfilePage.vue";
 
@@ -11,7 +11,7 @@ export default defineComponent({
   components: {
     ProfilePage,
   },
-  created() {
+  created(): void {
     this.$store.commit("addProfile", {
       id: "baby",
       fname: "Baby",

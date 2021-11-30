@@ -32,13 +32,20 @@ import ProfileStub from "@/components/ProfileStub.vue";
 import ProfilePaginator from "@/components/ProfilePaginator.vue";
 import { Profile } from "@/models/profile.model";
 
+interface ProfileListData {
+  loading: boolean;
+  perPage: number;
+  pageOfItems: Array<Profile>;
+  query: string;
+}
+
 export default defineComponent({
   name: "ProfileList",
   components: {
     ProfileStub,
     ProfilePaginator,
   },
-  data() {
+  data(): ProfileListData {
     return {
       loading: false,
       perPage: 2,
@@ -48,25 +55,33 @@ export default defineComponent({
   },
   computed: {
     ...mapState(["profiles"]),
-    queriedItems() {
+    queriedItems(): Array<Profile> {
       if (this.query) {
-        return this.$store.getters.profiles.filter((e: Profile) => {
-          return (
-            e["fname"].indexOf(this.query) !== -1 ||
-            e["lname"].indexOf(this.query) !== -1
-          );
-        });
+        return this.alphabetical(
+          this.$store.getters.profiles.filter((e: Profile) => {
+            return (
+              e["fname"].indexOf(this.query) !== -1 ||
+              e["lname"].indexOf(this.query) !== -1
+            );
+          })
+        );
       } else {
-        return this.$store.getters.profiles;
+        return this.alphabetical(this.$store.getters.profiles);
       }
     },
   },
   methods: {
-    updatePage(newItems: Array<Profile>) {
+    updatePage(newItems: Array<Profile>): void {
       this.pageOfItems = newItems;
     },
+    alphabetical(list: Array<Profile>): Array<Profile> {
+      const x = [...list].sort((a: Profile, b: Profile) => {
+        return a.fname < b.fname ? -1 : a.fname > b.fname ? 1 : 0;
+      });
+      return x;
+    },
   },
-  mounted() {
+  mounted(): void {
     if (!this.profiles) {
       this.$store.dispatch("loadProfiles");
     }

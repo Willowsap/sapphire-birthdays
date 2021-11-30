@@ -1,12 +1,15 @@
+import { UserState } from "@/store/models/userState.model";
 import axios from "axios";
+import { ActionContext } from "vuex";
 
 const url = "https://sapphire-birthdays-server.herokuapp.com/api/user";
 // const url = "http://localhost:3000/api/user";
+
 let timer: number;
 
 export default {
   async signUp(
-    context: any,
+    context: ActionContext<UserState, Record<string, never>>,
     userData: { email: string; password: string }
   ): Promise<void> {
     await axios.post(url + "/signup", userData).then((res) => {
@@ -17,7 +20,7 @@ export default {
     });
   },
   async signIn(
-    context: any,
+    context: ActionContext<UserState, Record<string, never>>,
     userData: { email: string; password: string }
   ): Promise<void> {
     await axios.post(url + "/login", userData).then((res) => {
@@ -42,7 +45,7 @@ export default {
       }
     });
   },
-  autoLogIn(context: any): void {
+  autoLogIn(context: ActionContext<UserState, Record<string, never>>): void {
     const token = localStorage.getItem("token");
     const tokenExpiration = localStorage.getItem("tokenExpiration");
     if (token && tokenExpiration) {
@@ -61,11 +64,11 @@ export default {
       }
     }
   },
-  logout(context: any): void {
+  logout(context: ActionContext<UserState, Record<string, never>>): void {
     localStorage.removeItem("token");
     localStorage.removeItem("email");
     localStorage.removeItem("tokenExpiration");
     clearTimeout(timer);
     context.commit("logUserOut");
-  }
+  },
 };

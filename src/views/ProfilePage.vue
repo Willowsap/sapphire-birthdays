@@ -12,7 +12,7 @@
     :image="profile.imagePath"
     :alt="profile.fname + profile.lname"
   />
-  <birthday-fun v-if="isBirthday" :profile="profile"/>
+  <birthday-fun v-if="isBirthday" :profile="profile" />
   <router-link :to="`/edit/${profileId}`" v-if="authorized">Edit</router-link>
 </template>
 
@@ -36,12 +36,12 @@ export default defineComponent({
     profileId: String,
   },
   computed: {
-    profile() {
+    profile(): Profile {
       return this.$store.getters.profiles.find(
         (e: Profile) => e.id === this.profileId
       );
     },
-    isBirthday() {
+    isBirthday(): boolean {
       if (!this.profile) {
         return false;
       }
@@ -56,7 +56,7 @@ export default defineComponent({
         return false;
       }
     },
-    nextBirthday() {
+    nextBirthday(): Date {
       const now = new Date();
       const next = new Date(this.profile.birthday);
       next.setFullYear(now.getFullYear());
@@ -65,8 +65,7 @@ export default defineComponent({
       }
       return next;
     },
-    authorized() {
-      console.log(this.profile.email)
+    authorized(): boolean {
       return (
         this.$store.getters.isSignedIn &&
         this.$store.getters.email === this.profile.email

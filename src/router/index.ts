@@ -1,4 +1,10 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  NavigationGuardNext,
+  RouteLocationNormalized,
+  RouteRecordRaw,
+} from "vue-router";
 import ProfileList from "../views/ProfileList.vue";
 import store from "@/store";
 
@@ -61,14 +67,20 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, _, next) => {
-  if (to.meta.requiresAuth && !store.getters.isSignedIn) {
-    next("/signIn");
-  } else if (to.meta.requiresUnauth && store.getters.isSignedIn) {
-    next("/");
-  } else {
-    next();
+router.beforeEach(
+  (
+    to: RouteLocationNormalized,
+    _: RouteLocationNormalized,
+    next: NavigationGuardNext
+  ) => {
+    if (to.meta.requiresAuth && !store.getters.isSignedIn) {
+      next("/signIn");
+    } else if (to.meta.requiresUnauth && store.getters.isSignedIn) {
+      next("/");
+    } else {
+      next();
+    }
   }
-});
+);
 
 export default router;
