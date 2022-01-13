@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const url = "https://sapphire-birthdays-server.herokuapp.com/api/user";
-// const url = "http://localhost:3000/api/user";
 let timer: number;
 
 export default {
@@ -10,7 +9,6 @@ export default {
     userData: { email: string; password: string }
   ): Promise<void> {
     await axios.post(url + "/signup", userData).then((res) => {
-      console.log(res);
       if (res.status === 201) {
         context.dispatch("signIn", userData);
       }

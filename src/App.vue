@@ -1,3 +1,4 @@
+<!--COMMENT HERES A COMMENT-->
 <template>
   <the-header />
   <router-view v-if="!loading" />
@@ -21,14 +22,14 @@ export default defineComponent({
     };
   },
   methods: {
-    loadProfiles() {
+    loadProfiles(): void {
       this.loading = true;
       this.$store.dispatch("loadProfiles").then(() => {
         this.loading = false;
       });
     },
   },
-  created() {
+  created(): void {
     this.loadProfiles();
     this.$store.dispatch("autoLogIn");
   },

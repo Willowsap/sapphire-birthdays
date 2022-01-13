@@ -3,7 +3,6 @@ import transformId from "@/store/utils/transformProfile";
 import { Profile } from "@/models/profile.model";
 
 const url = "https://sapphire-birthdays-server.herokuapp.com/api/profiles";
-// const url = "http://localhost:3000/api/profiles";
 
 export default {
   async loadProfiles(context: any): Promise<void> {
