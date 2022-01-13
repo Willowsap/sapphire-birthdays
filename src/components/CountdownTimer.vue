@@ -51,26 +51,26 @@ export default defineComponent({
     };
   },
   computed: {
-    dayString() {
+    dayString(): string {
       return this.days.toString();
     },
-    hourString() {
+    hourString(): string {
       return this.hours > 9
         ? this.hours.toString()
         : "0" + this.hours.toString();
     },
-    minuteString() {
+    minuteString(): string {
       return this.minutes > 9
         ? this.minutes.toString()
         : "0" + this.minutes.toString();
     },
-    secondString() {
+    secondString(): string {
       return this.seconds > 9
         ? this.seconds.toString()
         : "0" + this.seconds.toString();
     },
   },
-  mounted() {
+  mounted(): void {
     const end = new Date(this.end).getTime();
     this.setTimeVars(end - new Date().getTime());
     this.interval = setInterval(() => {
@@ -78,7 +78,7 @@ export default defineComponent({
     }, 1000);
   },
   methods: {
-    setTimeVars(dist: number) {
+    setTimeVars(dist: number): void {
       this.days = Math.floor(dist / (1000 * 60 * 60 * 24));
       this.hours = Math.floor(
         (dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)

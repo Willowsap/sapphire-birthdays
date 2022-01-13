@@ -44,10 +44,20 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 import ProfileImage from "@/components/ProfileImage.vue";
+import { Profile } from "@/models/profile.model";
 
+interface ProfileData {
+  fname: string;
+  mname: string;
+  lname: string;
+  about: string;
+  birthday: string;
+  imagePath: string;
+  image: File | null;
+}
 export default defineComponent({
   name: "ProfileForm",
   components: {
@@ -59,7 +69,7 @@ export default defineComponent({
       default: "new",
     },
   },
-  data() {
+  data(): ProfileData {
     return {
       fname: "",
       mname: "",
@@ -71,31 +81,38 @@ export default defineComponent({
     };
   },
   computed: {
-    email() {
+    email(): string {
       return this.$store.getters.email;
     },
   },
   methods: {
-    submitForm() {
+    submitForm(): void {
       if (this.profileId === "new") {
         this.createProfile();
       } else {
         this.updateProfile();
       }
     },
-    createProfile() {
-      this.$store.dispatch("createProfile", {
-        email: this.email,
-        fname: this.fname,
-        mname: this.mname,
-        lname: this.lname,
-        about: this.about,
-        birthday: this.birthday,
-        imagePath: this.image,
-      });
-      this.$router.push("/");
+    createProfile(): void {
+      this.$store
+        .dispatch("createProfile", {
+          email: this.email,
+          fname: this.fname,
+          mname: this.mname,
+          lname: this.lname,
+          about: this.about,
+          birthday: this.birthday,
+          imagePath: this.image,
+        })
+        .then((id: string) => {
+          if (id) {
+            this.$router.push(`/profile/${id}`);
+          } else {
+            this.$router.push("/");
+          }
+        });
     },
-    updateProfile() {
+    updateProfile(): void {
       this.$store.dispatch("editProfile", {
         id: this.profileId,
         email: this.email,
@@ -108,25 +125,29 @@ export default defineComponent({
       });
       this.$router.push(`/profile/${this.profileId}`);
     },
-    onImagePicked(event) {
-      const file = event.target.files[0];
-      this.image = file;
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePath = reader.result;
-      };
-      reader.readAsDataURL(file);
+    onImagePicked(event: Event): void {
+      const target = event.target as HTMLInputElement;
+      const files: FileList | null = target.files;
+      if (files) {
+        const file = files[0];
+        this.image = file;
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imagePath = reader.result as string;
+        };
+        reader.readAsDataURL(file);
+      }
     },
-    deletePrf() {
+    deletePrf(): void {
       this.$store.dispatch("deleteProfile", this.profileId).then(() => {
         this.$router.push("/");
       });
     },
   },
-  mounted() {
+  mounted(): void {
     if (this.profileId !== "new") {
       const prf = this.$store.getters.profiles.find(
-        (e) => e.id === this.profileId
+        (e: Profile) => e.id === this.profileId
       );
       this.fname = prf.fname;
       this.mname = prf.mname;

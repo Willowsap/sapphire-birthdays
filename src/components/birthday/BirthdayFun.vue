@@ -18,13 +18,13 @@ export default defineComponent({
     };
   },
   methods: {
-    play() {
+    play(): void {
       setInterval(() => {
         this.isBig = !this.isBig;
       }, 1000);
     },
   },
-  mounted() {
+  mounted(): void {
     this.play();
   },
 });

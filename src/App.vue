@@ -11,12 +11,16 @@ import { defineComponent } from "vue";
 import TheHeader from "./components/TheHeader.vue";
 import TheFooter from "./components/TheFooter.vue";
 
+interface RootData {
+  loading: boolean;
+}
+
 export default defineComponent({
   components: {
     TheHeader,
     TheFooter,
   },
-  data() {
+  data(): RootData {
     return {
       loading: false,
     };

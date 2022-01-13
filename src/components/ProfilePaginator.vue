@@ -26,6 +26,7 @@
 </template>
 
 <script lang="ts">
+import { Profile } from "@/models/profile.model";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -48,32 +49,32 @@ export default defineComponent({
     };
   },
   computed: {
-    numItems() {
+    numItems(): number {
       return this.items.length;
     },
-    numButtons() {
+    numButtons(): number {
       return Math.ceil(this.numItems / this.numPerPage);
     },
-    pageItems() {
+    pageItems(): Array<Profile> {
       const startIndex = this.numPerPage * (this.page - 1);
       const endIndex =
         startIndex +
         (this.numPerPage > this.numItems ? this.numItems : this.numPerPage);
-      return this.items.slice(startIndex, endIndex);
+      return this.items.slice(startIndex, endIndex) as Array<Profile>;
     },
   },
   watch: {
-    items() {
+    items(): void {
       this.goToPage(1);
     },
   },
   methods: {
-    getItemsInPage() {
+    getItemsInPage(): Array<Profile> {
       const startIndex = this.numPerPage * this.page;
       const endIndex = startIndex + this.numPerPage;
-      return this.items.slice(startIndex, endIndex);
+      return this.items.slice(startIndex, endIndex) as Array<Profile>;
     },
-    goToPage(pageNum: number) {
+    goToPage(pageNum: number): void {
       if (pageNum > this.numButtons) {
         this.page = this.numButtons;
       } else {
@@ -82,7 +83,7 @@ export default defineComponent({
       this.$emit("onChange", this.pageItems);
     },
   },
-  mounted() {
+  mounted(): void {
     this.goToPage(this.page);
   },
 });

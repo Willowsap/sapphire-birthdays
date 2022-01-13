@@ -22,7 +22,7 @@ export default defineComponent({
     CountdownTimer,
   },
   computed: {
-    birthdayEnd() {
+    birthdayEnd(): Date {
       const end = new Date();
       end.setHours(0);
       end.setMinutes(0);

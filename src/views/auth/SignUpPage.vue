@@ -20,19 +20,19 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
-
+import { ServerUser } from "@/models/user.model";
 export default defineComponent({
   name: "SignUpPage",
-  data() {
+  data(): ServerUser {
     return {
       email: "",
       password: "",
     };
   },
   methods: {
-    signUp() {
+    signUp(): void {
       this.$store
         .dispatch("signUp", {
           email: this.email,

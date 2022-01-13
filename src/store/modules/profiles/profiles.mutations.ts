@@ -27,4 +27,4 @@ export default {
       return item.id !== profileId;
     });
   },
-}
+};
